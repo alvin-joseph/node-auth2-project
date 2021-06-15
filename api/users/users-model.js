@@ -1,26 +1,18 @@
 const db = require('../../data/db-config.js');
 
 function find() {
-  /**
-    You will need to join two tables.
-    Resolves to an ARRAY with all users.
-
-    [
-      {
-        "user_id": 1,
-        "username": "bob",
-        "role_name": "admin"
-      },
-      {
-        "user_id": 2,
-        "username": "sue",
-        "role_name": "instructor"
-      }
-    ]
-   */
+  return db('users as u')
+    .select('user_id', 'username', 'r.role_name')
+    .leftJoin('roles as r', 'u.role_id', 'r.role_id')
+    .orderBy('u.user_id')
 }
 
 function findBy(filter) {
+  return db('users as u')
+    .select('user_id', 'username', 'password', 'r.role_name')
+    .where(filter)
+    .leftJoin('roles as r', 'u.role_id', 'r.role_id')
+    .orderBy('u.user_id')
   /**
     You will need to join two tables.
     Resolves to an ARRAY with all users that match the filter condition.
@@ -37,6 +29,11 @@ function findBy(filter) {
 }
 
 function findById(user_id) {
+  return db('users as u')
+    .select('user_id', 'username', 'r.role_name')
+    .where('u.user_id', user_id)
+    .leftJoin('roles as r', 'u.role_id', 'r.role_id')
+    .orderBy('u.user_id')
   /**
     You will need to join two tables.
     Resolves to the user with the given user_id.
